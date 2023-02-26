@@ -1,19 +1,27 @@
-import { StyleSheet, Text, View, Dimensions, Image } from "react-native" 
+import { StyleSheet, Text, View, Dimensions, Image, Pressable } from "react-native" 
+import { Themes } from "../assets/Themes";
+import { Ionicons } from '@expo/vector-icons'; 
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function Song({ item, index }) {
+export default function Song({ item, navigation }) {
     return (
-        <View style={styles.SongBox}>
-            <View style={styles.IndexBox}><Text style={styles.SongIndex}>{index + 1}</Text></View>
-            <Image style={styles.AlbumImage} source={{uri: item.imageUrl}} />
-            <View style={styles.SongTitleArtistBox}>
-                <Text numberOfLines={1} style={styles.SongTitle}>{item.songTitle}</Text>
-                <Text numberOfLines={1} style={styles.SongArtist}>{item.songArtists[0].name}</Text>
-            </View>
-            <View style={styles.AlbumNameBox}><Text numberOfLines={1} style={styles.SongAlbum}>{item.albumName}</Text></View>
-            <View style={styles.DurationBox}><Text style={styles.SongDuration}>{convertMillisToTime(item.duration)}</Text></View>
+        <View style ={styles.Container}>
+            <Pressable onPress={() => navigation.navigate('PreviewScreen', {url: item.previewUrl})}>
+                <Ionicons style={styles.PlayBox} name="play-circle" size={21} color={Themes.colors.spotify} />
+            </Pressable>
+            <Pressable onPress={() => navigation.navigate('DetailsScreen', {url: item.externalUrl})}>
+                <View style={styles.SongBox}>
+                    <Image style={styles.AlbumImage} source={{uri: item.imageUrl}} />
+                    <View style={styles.SongTitleArtistBox}>
+                        <Text numberOfLines={1} style={styles.SongTitle}>{item.songTitle}</Text>
+                        <Text numberOfLines={1} style={styles.SongArtist}>{item.songArtists[0].name}</Text>
+                    </View>
+                    <View style={styles.AlbumNameBox}><Text numberOfLines={1} style={styles.SongAlbum}>{item.albumName}</Text></View>
+                    <View style={styles.DurationBox}><Text style={styles.SongDuration}>{convertMillisToTime(item.duration)}</Text></View>
+                </View>
+            </Pressable>
         </View>
     );
 };
@@ -27,24 +35,27 @@ const convertMillisToTime = (millis) => {
 }
 
 const styles = StyleSheet.create({
+    Container: {
+        flexDirection: "row",
+        alignItems: "center"
+    },
     SongBox: {
         flexDirection: "row",
-        paddingBottom: windowHeight * 0.025,
+        paddingTop: windowHeight * 0.0125,
+        paddingBottom: windowHeight * 0.0125,
         width: windowWidth,
         paddingRight: windowWidth * 0.01
     },
     SongTitleArtistBox: {
         flexDirection: "column",
         justifyContent: "center",
-        width: windowWidth * 0.375,
+        width: windowWidth * 0.35,
         paddingLeft: windowWidth * 0.02,
         paddingRight: windowWidth * 0.025
     },
-    IndexBox: {
-        flexDirection: "column",
-        justifyContent: "center",
-        paddingLeft: windowWidth * 0.015,
-        paddingRight: windowWidth * 0.02
+    PlayBox: {
+        paddingLeft: windowWidth * 0.02,
+        paddingRight: windowWidth * 0.025
     },
     AlbumNameBox: {
         flexDirection: "column",
@@ -55,10 +66,6 @@ const styles = StyleSheet.create({
     DurationBox: {
         flexDirection: "column",
         justifyContent: "center",
-    },
-    SongIndex: {
-        color: "white",
-        alignItems: "center"
     },
     AlbumImage: {
         height: windowWidth * 0.15,

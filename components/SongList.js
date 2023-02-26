@@ -4,21 +4,23 @@ import Song from "./Song";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const SongList = ({ tracks }) => {
+const SongList = ({ tracks, navigation }) => {
+   //console.log('navigation prop:', navigation)
     return (
         <FlatList style={styles.List}
           data={tracks}
-          renderItem={({ item, index }) => {
-            return  <Song item={item} index={index}/>
+          renderItem={({ item }) => {
+            return  <Song item={item} navigation={navigation}/>
           }}
           keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
         />
     );
 };
 
 const styles = StyleSheet.create({
     List: {
-        paddingTop: windowHeight * 0.0075,
+        paddingTop: 0,
     }
   });
 

@@ -35,7 +35,7 @@ const formatter = (data) => data.map((val) => {
   });
 });
 // changed ALBUM_ONLY to true so that it gets album songs
-const useSpotifyAuth = (ALBUM_ONLY = true) => {
+const useSpotifyAuth = (ALBUM_ONLY) => {
   const [token, setToken] = useState("");
   const [tracks, setTracks] = useState([]);
   const [_, response, promptAsync] = useAuthRequest(

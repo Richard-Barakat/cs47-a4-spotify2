@@ -1,43 +1,32 @@
-import { StyleSheet, SafeAreaView, Text, Pressable, View } from "react-native";
-import { useSpotifyAuth } from "./utils";
+import { StyleSheet } from "react-native";
 import { Themes } from "./assets/Themes";
-import SpotifyAuthButton from "./components/SpotifyAuthButton";
-import SongList from "./components/SongList";
-import Header from "./components/Header";
+import "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import HomeScreen from "./screens/HomeScreen";
+import DetailsScreen from "./screens/DetailsScreen";
+import PreviewScreen from "./screens/PreviewScreen";
+
+const Stack = createStackNavigator();
 
 export default function App() {
-  // Pass in true to useSpotifyAuth to use the album ID (in env.js) instead of top tracks
-  const { token, tracks, getSpotifyAuth } = useSpotifyAuth();
-
-  console.log("tracks", tracks);
-
-  let contentDisplayed = null;
-
-  if (token) {
-    contentDisplayed = (
-      <View> 
-        <Header/>
-        <SongList tracks={tracks} />
-      </View>
-    );
-  } else {
-    contentDisplayed = (
-      <SpotifyAuthButton authenticationFunction={getSpotifyAuth} />
-    );
-  }
-
-  return (
-    <SafeAreaView style={styles.container}>
-      {contentDisplayed}
-    </SafeAreaView>
-  );
-}
+  return <NavigationContainer>
+    <Stack.Navigator screenOptions={styles.Header}>
+      <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name="DetailsScreen" component={DetailsScreen} options={{ title: 'Song Details' }}/>
+      <Stack.Screen name="PreviewScreen" component={PreviewScreen} options={{ title: 'Song Preview' }}/>
+    </Stack.Navigator>
+  </NavigationContainer>
+};
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Themes.colors.background,
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
+  Header: {
+    headerStyle: {
+      backgroundColor: Themes.colors.background
+    },
+    headerTitleStyle: {
+      color: "white"
+    },
+    headerBackTitle: 'back'
   }
 });
